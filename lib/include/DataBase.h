@@ -42,6 +42,8 @@ struct Value {
 class DataBase {
 public:
     CommandResult Execute(const std::string& line);
+    size_t ParseMemory(const std::string& input);
+    void SetMemoryLimit(size_t limit);
 
     DataBase();
     ~DataBase() = default;
@@ -54,7 +56,6 @@ private:
 
     void ProccessExpiration(const std::string& key);
     double Haversine(double lon1, double lat1, double lon2, double lat2);
-    size_t ParseMemory(const std::string& input);
 
     CommandResult Set(const std::vector<std::string>& args);
     CommandResult Get(const std::vector<std::string>& args);

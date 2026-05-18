@@ -1,6 +1,6 @@
 #include "DataBase.h"
 
-size_t ParseMemory(const std::string& input) {
+size_t DataBase::ParseMemory(const std::string& input) {
     std::string value = input;
     std::string suffix;
 

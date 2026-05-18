@@ -5,7 +5,7 @@ double ToRadians(double deg) {
     return deg * M_PI / 180.0;
 }
 
-double Haversine(double lon1, double lat1,
+double DataBase::Haversine(double lon1, double lat1,
                  double lon2, double lat2) {
 
     const double R = 6372.8;
