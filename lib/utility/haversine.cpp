@@ -1,6 +1,5 @@
 #include "DataBase.h"
-
-#include <math.h>
+#include <cmath>
 
 double ToRadians(double deg) {
     return deg * M_PI / 180.0;

@@ -54,6 +54,7 @@ private:
 
     void ProccessExpiration(const std::string& key);
     double Haversine(double lon1, double lat1, double lon2, double lat2);
+    size_t ParseMemory(const std::string& input);
 
     CommandResult Set(const std::vector<std::string>& args);
     CommandResult Get(const std::vector<std::string>& args);
@@ -87,36 +88,14 @@ private:
     CommandResult GeoDist(const std::vector<std::string>& args);
     CommandResult GeoSearch(const std::vector<std::string>& args);
     CommandResult GeoSearchStore(const std::vector<std::string>& args);
+
+    CommandResult Type(const std::vector<std::string>& args);
+    CommandResult Del(const std::vector<std::string>& args);
+    CommandResult Exists(const std::vector<std::string>& args);
+    CommandResult Keys(const std::vector<std::string>& args);
+    CommandResult FlushDB(const std::vector<std::string>& args);
+    CommandResult ConfigSet(const std::vector<std::string>& args);
+    CommandResult ConfigGet(const std::vector<std::string>& args);
+    CommandResult DBSize(const std::vector<std::string>& args);
+    CommandResult MemoryUsage(const std::vector<std::string>& args);
 };
-
-/*
-LPUSH	LPUSH key value [value ...]	Добавить элементы в начало списка
-RPUSH	RPUSH key value [value ...]	Добавить элементы в конец списка
-LPOP	LPOP key [count]	Извлечь и вернуть элементы из начала списка
-RPOP	RPOP key [count]	Извлечь и вернуть элементы из конца списка
-LLEN	LLEN key	Вернуть длину списка
-LRANGE	LRANGE key start stop	Вернуть подсписок по индексам (поддерживаются отрицательные индексы)
-LINDEX	LINDEX key index	Вернуть элемент по индексу
-LSET	LSET key index value	Установить значение элемента по индексу
-LINSERT	LINSERT key BEFORE|AFTER pivot value	Вставить элемент до или после опорного значения
-*/
-
-/*
-SADD	SADD key member [member ...]	Добавить элементы в множество
-SREM	SREM key member [member ...]	Удалить элементы из множества
-SISMEMBER	SISMEMBER key member	Проверить принадлежность элемента множеству
-SMEMBERS	SMEMBERS key	Вернуть все элементы множества
-SCARD	SCARD key	Вернуть количество элементов
-SUNION	SUNION key [key ...]	Объединение нескольких множеств
-SINTER	SINTER key [key ...]	Пересечение нескольких множеств
-SDIFF	SDIFF key [key ...]	Разность множеств (элементы первого, отсутствующие в остальных)
-SMOVE	SMOVE source destination member	Переместить элемент из одного множества в другое
-*/
-
-/*
-GEOADD	GEOADD key longitude latitude member [longitude latitude member ...]	Добавить точки с координатами
-GEOPOS	GEOPOS key member [member ...]	Получить координаты точек
-GEODIST	GEODIST key member1 member2 [unit]	Вычислить расстояние между двумя точками. Единицы: m, km, mi, ft
-GEOSEARCH	GEOSEARCH key FROMLONLAT lon lat BYRADIUS radius unit [ASC|DESC] [COUNT count]	Найти точки в заданном радиусе от координаты
-GEOSEARCHSTORE	GEOSEARCHSTORE dest source FROMLONLAT lon lat BYRADIUS radius unit [ASC|DESC] [COUNT count]	То же, но сохранить результат в новый ключ
-*/
