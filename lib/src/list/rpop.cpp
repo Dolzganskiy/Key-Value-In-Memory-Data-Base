@@ -8,7 +8,7 @@
 
 CommandResult DataBase::RPop(const std::vector<std::string>& args) {
     if (args.size() != 2 && args.size() != 3) {
-        return std::unexpected("(error) wrong number of arguments for 'LPOP'");
+        return std::unexpected("(error) wrong number of arguments for 'RPOP'");
     }
 
     const std::string& key = args[1];

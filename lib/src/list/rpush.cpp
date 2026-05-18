@@ -2,7 +2,7 @@
 
 CommandResult DataBase::RPush(const std::vector<std::string>& args) {
     if (args.size() < 3) {
-        return std::unexpected("(error) wrong number of arguments for 'LPUSH'");
+        return std::unexpected("(error) wrong number of arguments for 'RPUSH'");
     }
 
     const std::string& key = args[1];
