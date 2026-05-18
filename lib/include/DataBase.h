@@ -10,7 +10,7 @@
 #include <expected>
 #include <list>
 
-struct GeoPos {
+struct GeoPoint {
     double lon;
     double lat;
 };
@@ -18,7 +18,7 @@ struct GeoPos {
 using StringType = std::string;
 using ListType = std::list<std::string>;
 using SetType = std::unordered_set<std::string>;
-using GeoType = std::unordered_map<std::string, GeoPos>;
+using GeoType = std::unordered_map<std::string, GeoPoint>;
 using ValueData = std::variant<StringType, ListType, SetType, GeoType>;
 using TimePoint = std::chrono::steady_clock::time_point;
 
