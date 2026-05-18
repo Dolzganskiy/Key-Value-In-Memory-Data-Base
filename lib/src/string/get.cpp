@@ -23,8 +23,6 @@ CommandResult DataBase::Get(const std::vector<std::string>& args) {
     }
 
     return std::get<StringType>(it->second.data);
-
-
 }
 
 // unknown command	(error) unknown command
