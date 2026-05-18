@@ -22,7 +22,7 @@ CommandResult DataBase::Get(const std::vector<std::string>& args) {
         return std::unexpected("(error) WRONGTYPE Operation against a key holding the wrong kind of value");
     }
 
-    return std::get<std::string>(it->second.data);
+    return std::get<StringType>(it->second.data);
 
 
 }

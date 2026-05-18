@@ -35,7 +35,7 @@ CommandResult DataBase::Append(const std::vector<std::string>& args) {
         return std::unexpected("(error) WRONGTYPE Operation against a key holding the wrong kind of value");
     }
 
-    std::string& str = std::get<std::string>(it->second.data);
+    std::string& str = std::get<StringType>(it->second.data);
 
     size_t delta = append_value.size();
 

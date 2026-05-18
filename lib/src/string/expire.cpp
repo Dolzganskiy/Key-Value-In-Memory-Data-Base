@@ -8,7 +8,7 @@
 
 CommandResult DataBase::Expire(const std::vector<std::string>& args) {
     if (args.size() != 3) {
-        return std::unexpected("(error) wrong number of arguments for 'SET'");
+        return std::unexpected("(error) wrong number of arguments for 'EXPIRE'");
     }
 
     const std::string& key = args[1];

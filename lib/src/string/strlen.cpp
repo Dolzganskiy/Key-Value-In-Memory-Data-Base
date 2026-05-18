@@ -23,7 +23,7 @@ CommandResult DataBase::Strlen(const std::vector<std::string>& args) {
         return std::unexpected("(error) WRONGTYPE Operation against a key holding the wrong kind of value");
     }
 
-    size_t lenght = std::get<std::string>(it->second.data).size();
+    size_t lenght = std::get<StringType>(it->second.data).size();
     return std::to_string(lenght);
 }   
 

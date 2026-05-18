@@ -28,7 +28,7 @@ CommandResult DataBase::Set(const std::vector<std::string>& args) {
     }
 
     memory_usage_ = memory_usage_ - old_weight + new_weight;
-    Value val {new_weight, value, ValueType::kString, std::nullopt};
+    Value val{new_weight, value, ValueType::kString, std::nullopt};
     db_[key] = std::move(val);
 
     return "OK";

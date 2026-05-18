@@ -8,6 +8,7 @@
 #include <chrono>
 #include <functional>
 #include <expected>
+#include <list>
 
 struct GeoPos {
     double lon;
@@ -15,7 +16,7 @@ struct GeoPos {
 };
 
 using StringType = std::string;
-using ListType = std::vector<std::string>;
+using ListType = std::list<std::string>;
 using SetType = std::unordered_set<std::string>;
 using GeoType = std::unordered_map<std::string, GeoPos>;
 using ValueData = std::variant<StringType, ListType, SetType, GeoType>;
@@ -23,7 +24,6 @@ using TimePoint = std::chrono::steady_clock::time_point;
 
 using CommandResult = std::expected<std::string, std::string>;
 using CommandHandler = std::function<CommandResult(const std::vector<std::string>&)>;
-
 
 enum class ValueType {
     kString,
@@ -52,6 +52,7 @@ private:
     std::unordered_map<std::string, Value> db_;
     std::unordered_map<std::string, CommandHandler> handlers_;
 
+    void ProccessExpiration(const std::string& key);
 
     CommandResult Set(const std::vector<std::string>& args);
     CommandResult Get(const std::vector<std::string>& args);
