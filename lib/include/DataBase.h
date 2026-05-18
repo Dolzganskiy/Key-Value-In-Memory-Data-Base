@@ -53,6 +53,7 @@ private:
     std::unordered_map<std::string, CommandHandler> handlers_;
 
     void ProccessExpiration(const std::string& key);
+    double Haversine(double lon1, double lat1, double lon2, double lat2);
 
     CommandResult Set(const std::vector<std::string>& args);
     CommandResult Get(const std::vector<std::string>& args);
