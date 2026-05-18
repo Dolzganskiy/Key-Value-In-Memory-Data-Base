@@ -67,5 +67,4 @@ CommandResult DataBase::LRange(const std::vector<std::string>& args) {
     }
 
     return result;
-
 }
