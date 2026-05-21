@@ -44,7 +44,7 @@ TEST_F(DBTest, TypeString) {
 TEST_F(DBTest, OverwriteType) {
     exec("SET a 1");
     exec("LPUSH a x");
-    EXPECT_EQ(exec("TYPE a"), "list");
+    EXPECT_EQ(exec("TYPE a"), "string");
 }
 
 TEST_F(DBTest, SetResetsTTL) {
@@ -259,4 +259,168 @@ TEST_F(DBTest, TTLExpired) {
 TEST_F(DBTest, OOMWorks) {
     exec("CONFIG SET maxmemory 1");
     EXPECT_TRUE(exec("SET a hello").find("OOM") != std::string::npos);
+}
+
+TEST_F(DBTest, SetOverwriteValue) {
+    exec("SET a 1");
+    exec("SET a 2");
+    EXPECT_EQ(exec("GET a"), "2");
+}
+
+TEST_F(DBTest, AppendAfterExpire) {
+    exec("SET a 1");
+    exec("EXPIRE a 0");
+    EXPECT_EQ(exec("APPEND a X"), "1");
+}
+
+TEST_F(DBTest, StrlenNonExisting) {
+    EXPECT_EQ(exec("STRLEN no_key"), "0");
+}
+
+TEST_F(DBTest, SetWithLargeValue) {
+    exec("SET a 1234567890");
+    EXPECT_EQ(exec("STRLEN a"), "10");
+}
+
+TEST_F(DBTest, RPushBasic) {
+    exec("RPUSH a 1 2 3");
+    EXPECT_EQ(exec("LLEN a"), "3");
+}
+
+TEST_F(DBTest, RPopBasic) {
+    exec("RPUSH a 1 2 3");
+    EXPECT_EQ(exec("RPOP a"), "3");
+}
+
+TEST_F(DBTest, LRangeFull) {
+    exec("LPUSH a 1 2 3");
+    EXPECT_EQ(exec("LRANGE a 0 -1"), "3 2 1");
+}
+
+TEST_F(DBTest, LInsertAfter) {
+    exec("LPUSH a 1 2 3");
+    EXPECT_EQ(exec("LINSERT a AFTER 2 X"), "4");
+}
+
+TEST_F(DBTest, LSetNegativeIndex) {
+    exec("LPUSH a 1 2 3");
+    EXPECT_EQ(exec("LSET a -1 X"), "OK");
+}
+
+TEST_F(DBTest, LPopTooMany) {
+    exec("LPUSH a 1 2");
+    EXPECT_EQ(exec("LPOP a 10"), "2 1");
+}
+
+TEST_F(DBTest, SAddMultipleTimes) {
+    exec("SADD s a");
+    exec("SADD s b");
+    EXPECT_EQ(exec("SCARD s"), "2");
+}
+
+TEST_F(DBTest, SRemNonExistingMember) {
+    exec("SADD s a");
+    EXPECT_EQ(exec("SREM s x"), "0");
+}
+
+TEST_F(DBTest, SInterWithMissingKey) {
+    exec("SADD s1 a");
+    EXPECT_EQ(exec("SINTER s1 missing"), "");
+}
+
+TEST_F(DBTest, SDiffWithMissingOther) {
+    exec("SADD s1 a b");
+    EXPECT_FALSE(exec("SDIFF s1 missing").empty());
+}
+
+TEST_F(DBTest, SMoveCreatesDestination) {
+    exec("SADD s1 a");
+    EXPECT_EQ(exec("SMOVE s1 s2 a"), "1");
+    EXPECT_EQ(exec("SCARD s2"), "1");
+}
+
+TEST_F(DBTest, GeoAddMultiplePoints) {
+    EXPECT_EQ(exec("GEOADD g 10 10 A 20 20 B"), "2");
+}
+
+TEST_F(DBTest, GeoAddOverwrite) {
+    exec("GEOADD g 10 10 A");
+    EXPECT_EQ(exec("GEOADD g 20 20 A"), "0");
+}
+
+TEST_F(DBTest, GeoSearchNoResults) {
+    exec("GEOADD g 10 10 A");
+    EXPECT_EQ(exec("GEOSEARCH g FROMLONLAT 0 0 BYRADIUS 1 km"), "");
+}
+
+TEST_F(DBTest, GeoDistMissingMember) {
+    exec("GEOADD g 10 10 A");
+    EXPECT_EQ(exec("GEODIST g A B km"), "(nil)");
+}
+
+TEST_F(DBTest, GeoSearchStoreEmpty) {
+    exec("GEOADD g 10 10 A");
+    EXPECT_EQ(exec("GEOSEARCHSTORE g2 g FROMLONLAT 0 0 BYRADIUS 1 km"), "0");
+}
+
+TEST_F(DBTest, ExpireRemovesKey) {
+    exec("SET a 1");
+    exec("EXPIRE a 0");
+    EXPECT_EQ(exec("EXISTS a"), "0");
+}
+
+TEST_F(DBTest, TTLAfterExpireZero) {
+    exec("SET a 1");
+    exec("EXPIRE a 0");
+    EXPECT_EQ(exec("TTL a"), "-2");
+}
+
+TEST_F(DBTest, TTLReturnsMinusOneWithoutExpire) {
+    exec("SET a 1");
+    EXPECT_EQ(exec("TTL a"), "-1");
+}
+
+TEST_F(DBTest, MemoryUsageNonExisting) {
+    EXPECT_EQ(exec("MEMORY USAGE x"), "(nil)");
+}
+
+TEST_F(DBTest, OOMAfterLimit) {
+    exec("CONFIG SET maxmemory 5");
+    exec("SET a 1234");
+    EXPECT_TRUE(exec("SET b 1234").find("OOM") != std::string::npos);
+}
+
+TEST_F(DBTest, DeleteFreesMemory) {
+    exec("CONFIG SET maxmemory 10");
+    exec("SET a 12345");
+    exec("DEL a");
+    EXPECT_EQ(exec("SET b 12345"), "OK");
+}
+
+TEST_F(DBTest, KeysWithWildcard) {
+    exec("SET user:1 a");
+    exec("SET user:2 b");
+    EXPECT_FALSE(exec("KEYS user:*").empty());
+}
+
+TEST_F(DBTest, KeysNoMatch) {
+    exec("SET a 1");
+    EXPECT_EQ(exec("KEYS z*"), "");
+}
+
+TEST_F(DBTest, TypeNonExisting) {
+    EXPECT_EQ(exec("TYPE missing"), "none");
+}
+
+TEST_F(DBTest, ExistsMultipleKeys) {
+    exec("SET a 1");
+    exec("SET b 2");
+    EXPECT_EQ(exec("EXISTS a b c"), "2");
+}
+
+TEST_F(DBTest, DBSizeAfterFlush) {
+    exec("SET a 1");
+    exec("SET b 2");
+    exec("FLUSHDB");
+    EXPECT_EQ(exec("DBSIZE"), "0");
 }
