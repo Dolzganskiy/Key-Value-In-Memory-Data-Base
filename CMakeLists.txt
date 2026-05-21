@@ -50,7 +50,7 @@ add_executable(
     tests/tests.cpp
 )
 
-target_link_libraries(database-lib-tests PRIVATE db_lib gtest_main gmock)
+target_link_libraries(database-lib-tests PRIVATE db_lib GTest::gtest_main GTest::gmock)
 
 include(GoogleTest)
 gtest_discover_tests(database-lib-tests)
