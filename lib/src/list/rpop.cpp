@@ -27,7 +27,7 @@ CommandResult DataBase::RPop(const std::vector<std::string>& args) {
     int count = 1;
     if (args.size() == 3) {
         try {
-            count += std::stoi(args[2]);
+            count = std::stoi(args[2]);
         } catch(...) {
             return std::unexpected("(error) value is not an integer or out of range");
         }

@@ -57,7 +57,7 @@ DataBase::DataBase() : memory_usage_(0), memory_limit_(std::nullopt) {
                 [](unsigned char c) {return std::toupper(c); });
 
             if (sub == "SET") return ConfigSet(args);
-            if (sub == "GET") return ConfigSet(args);
+            if (sub == "GET") return ConfigGet(args);
         }
         return std::unexpected("(error) wrong CONFIG command"); };
     handlers_["DBSIZE"] = [this](const auto& args) { return DBSize(args); };

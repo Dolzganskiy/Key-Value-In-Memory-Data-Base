@@ -28,7 +28,7 @@ CommandResult DataBase::Append(const std::vector<std::string>& args) {
         db_[key] = val;
         memory_usage_ += new_weight;
 
-        return "OK";
+        return std::to_string(append_value.size());
     }
 
     if (it->second.type != ValueType::kString) {
@@ -50,5 +50,5 @@ CommandResult DataBase::Append(const std::vector<std::string>& args) {
     it->second.memory_usage += delta;
     memory_usage_ += delta;
 
-    return "OK";
+    return std::to_string(str.size());
 }
